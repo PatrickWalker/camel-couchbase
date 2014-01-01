@@ -1,7 +1,7 @@
 Camel-couchbase
 ===============
 
-This is a Couchbase component for Camel. Codebase is very similar to CouchDB component.
+This is a Couchbase component for Camel. Codebase is very similar to camel-couchdb component.
 
 How to build the code
 =====================
