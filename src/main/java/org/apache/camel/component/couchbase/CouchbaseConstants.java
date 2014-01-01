@@ -19,13 +19,10 @@ package org.apache.camel.component.couchbase;
 
 public interface CouchbaseConstants {
 
-    String HEADER_KEY = "KEY";
-
-    /*
-    String HEADER_DATABASE = "CouchDbDatabase";
-    String HEADER_SEQ = "CouchDbSeq";
-    String HEADER_DOC_REV = "CouchDbRev";
-    String HEADER_METHOD = "CouchDbMethod";
-    */
+    static String HEADER_KEY = "KEY";
+    static int COUCHBASE_DEFAULT_PORT = 8091;
+    static String COUCHBASE_URI_ERROR = "Invalid URI. Format must be of the form couchbase:http[s]://hostname[:port]/bucket?[options...]";
+    static String DEFAULT_DESIGN_DOCUMENT_NAME = "beer";
+    static String DEFAULT_VIEWNAME = "brewery_beers";
 
 }

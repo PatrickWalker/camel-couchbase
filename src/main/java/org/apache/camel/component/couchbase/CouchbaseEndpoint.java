@@ -29,10 +29,9 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
-public class CouchbaseEndpoint extends DefaultEndpoint {
+import static org.apache.camel.component.couchbase.CouchbaseConstants.*;
 
-    public static final int DEFAULT_PORT = 8091;
-    private static final String URI_ERROR = "Invalid URI. Format must be of the form couchbase:http[s]://hostname[:port]/bucket?[options...]";
+public class CouchbaseEndpoint extends DefaultEndpoint {
 
     private String protocol;
     private String bucket;
@@ -43,8 +42,9 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
     private boolean autoStartKeyForInserts = false;
     private long startKeyForInsertsFrom = 0;
 
-    private String designDocumentName = "beer";
-    private String viewName = "brewery_beers";
+    private String designDocumentName = DEFAULT_DESIGN_DOCUMENT_NAME;
+    private String viewName = DEFAULT_VIEWNAME;
+
     private int limit = -1;
     private boolean descending = false;
 
@@ -66,19 +66,19 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
 
         protocol = remainingUri.getScheme();
         if (protocol == null) {
-            throw new IllegalArgumentException(URI_ERROR);
+            throw new IllegalArgumentException(COUCHBASE_URI_ERROR);
         }
 
-        port = remainingUri.getPort() == -1 ? DEFAULT_PORT : remainingUri.getPort();
+        port = remainingUri.getPort() == -1 ? COUCHBASE_DEFAULT_PORT : remainingUri.getPort();
 
         if (remainingUri.getPath() == null || remainingUri.getPath().trim().length() == 0) {
-            throw new IllegalArgumentException(URI_ERROR);
+            throw new IllegalArgumentException(COUCHBASE_URI_ERROR);
         }
         bucket = remainingUri.getPath().substring(1);
 
         hostname = remainingUri.getHost();
         if (hostname == null) {
-            throw new IllegalArgumentException(URI_ERROR);
+            throw new IllegalArgumentException(COUCHBASE_URI_ERROR);
         }
     }
 

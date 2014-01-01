@@ -53,14 +53,6 @@ public class CouchbaseComponentTest {
         params.put("username", "ugol");
         params.put("password", "pwd");
 
-        /*
-        params.put("createDatabase", true);
-        params.put("heartbeat", 1000);
-        params.put("style", "gothic");
-        params.put("deletes", false);
-        params.put("updates", false);
-        */
-
         String uri = "couchdb:http://localhost:91234/bucket";
         String remaining = "http://localhost:91234/bucket";
 
@@ -73,13 +65,6 @@ public class CouchbaseComponentTest {
         assertEquals("ugol", endpoint.getUsername());
         assertEquals("pwd", endpoint.getPassword());
 
-        /*
-        assertEquals("gothic", endpoint.getStyle());
-        assertTrue(endpoint.isCreateDatabase());
-        assertFalse(endpoint.isDeletes());
-        assertFalse(endpoint.isUpdates());
-        assertEquals(1000, endpoint.getHeartbeat());
-        */
     }
 
     @Test
