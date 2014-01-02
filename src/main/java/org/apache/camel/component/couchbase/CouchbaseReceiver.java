@@ -68,7 +68,10 @@ public class CouchbaseReceiver implements Runnable {
     public void run() {
 
         ViewResponse result = client.query(view, query);
-
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Received result set from Couchbase");
+        }
+        
         for(ViewRow row : result) {
 
             String id = row.getId();
