@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.camel.component.couchbase;
+package org.apache.camel.component.couchbase.spikes;
 
 import com.couchbase.client.CouchbaseClient;
 import com.couchbase.client.protocol.views.Query;

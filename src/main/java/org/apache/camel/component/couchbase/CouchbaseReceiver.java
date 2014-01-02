@@ -26,6 +26,8 @@ import org.apache.camel.Exchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.apache.camel.component.couchbase.CouchbaseConstants.*;
+
 public class CouchbaseReceiver implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(CouchbaseReceiver.class);
@@ -68,20 +70,35 @@ public class CouchbaseReceiver implements Runnable {
         ViewResponse result = client.query(view, query);
 
         for(ViewRow row : result) {
-            String k = row.getId();
-            System.out.println("Key: " + k);
 
+            String id = row.getId();
             Object doc = row.getDocument();
-            System.out.println(doc);
 
-            //System.out.println("Document: " + client.get(k));
-            // The full document (as String) is available through row.getDocument();
+            String key = row.getKey();
+            String designDocumentName = endpoint.getDesignDocumentName();
+            String viewName = endpoint.getViewName();
+            //String geometry = row.getGeometry();
+            //String bbox = row.getBbox();
 
             Exchange exchange = endpoint.createExchange();
             exchange.getIn().setBody(doc);
+            exchange.getIn().setHeader(HEADER_ID, id);
+            exchange.getIn().setHeader(HEADER_KEY, key);
+            exchange.getIn().setHeader(HEADER_DESIGN_DOCUMENT_NAME, designDocumentName);
+            exchange.getIn().setHeader(HEADER_VIEWNAME, viewName);
+            //exchange.getIn().setHeader(HEADER_GEOMETRY, geometry);
+            //exchange.getIn().setHeader(HEADER_BBOX, bbox);
 
             if (LOG.isTraceEnabled()) {
                 LOG.trace("Created exchange = {}", exchange);
+                LOG.trace("Added Document in body = {}", doc);
+                LOG.trace("Adding to Header");
+                LOG.trace("ID = {}", id);
+                LOG.trace("Key = {}", key);
+                LOG.trace("Design Document Name = {}", designDocumentName);
+                LOG.trace("View Name = {}", viewName);
+                //LOG.trace("Geometry = {}", geometry);
+                //LOG.trace("Bbox = {}", bbox);
             }
 
             try {
@@ -95,7 +112,6 @@ public class CouchbaseReceiver implements Runnable {
     }
 
     public void stop() {
-        //changes.stop();
         client.shutdown();
     }
 
