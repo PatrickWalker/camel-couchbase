@@ -45,8 +45,15 @@ public class CouchbaseReceiver implements Runnable {
         this.consumer = consumer;
         this.client = client;
         this.view = client.getView(endpoint.getDesignDocumentName(), endpoint.getViewName());
-        query = new Query();
+        this.query = new Query();
+        init();
+
+    }
+
+    private void init() {
+
         query.setIncludeDocs(true);
+
         int limit = endpoint.getLimit();
         if (limit > 0) { query.setLimit(limit); }
 
@@ -57,10 +64,10 @@ public class CouchbaseReceiver implements Runnable {
 
         String rangeStartKey = endpoint.getRangeStartKey();
         String rangeEndKey = endpoint.getRangeEndKey();
-
-        if (!rangeStartKey.equals("") && !rangeEndKey.equals("")) {
-            query.setRange(rangeStartKey, rangeEndKey);
+        if (rangeStartKey.equals("") || rangeEndKey.equals("")) {
+            return;
         }
+        query.setRange(rangeStartKey, rangeEndKey);
 
     }
 
@@ -93,15 +100,7 @@ public class CouchbaseReceiver implements Runnable {
             //exchange.getIn().setHeader(HEADER_BBOX, bbox);
 
             if (LOG.isTraceEnabled()) {
-                LOG.trace("Created exchange = {}", exchange);
-                LOG.trace("Added Document in body = {}", doc);
-                LOG.trace("Adding to Header");
-                LOG.trace("ID = {}", id);
-                LOG.trace("Key = {}", key);
-                LOG.trace("Design Document Name = {}", designDocumentName);
-                LOG.trace("View Name = {}", viewName);
-                //LOG.trace("Geometry = {}", geometry);
-                //LOG.trace("Bbox = {}", bbox);
+                logDetails(id, doc, key, designDocumentName, viewName, exchange);
             }
 
             try {
@@ -112,6 +111,19 @@ public class CouchbaseReceiver implements Runnable {
         }
 
         stopped = true;
+    }
+
+    private void logDetails(String id, Object doc, String key, String designDocumentName, String viewName, Exchange exchange) {
+
+        LOG.trace("Created exchange = {}", exchange);
+        LOG.trace("Added Document in body = {}", doc);
+        LOG.trace("Adding to Header");
+        LOG.trace("ID = {}", id);
+        LOG.trace("Key = {}", key);
+        LOG.trace("Design Document Name = {}", designDocumentName);
+        LOG.trace("View Name = {}", viewName);
+        //LOG.trace("Geometry = {}", geometry);
+        //LOG.trace("Bbox = {}", bbox);
     }
 
     public void stop() {
