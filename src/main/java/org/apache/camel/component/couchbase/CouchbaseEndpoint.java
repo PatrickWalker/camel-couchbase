@@ -36,6 +36,7 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
     private String protocol;
     private String bucket;
     private String hostname;
+    private int port;
 
     private String key;
 
@@ -52,10 +53,10 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
 
     private String rangeStartKey = "";
     private String rangeEndKey = "";
-    private String username = "";
 
+    private String username = "";
     private String password = "";
-    private int port;
+
 
     public CouchbaseEndpoint() {
     }
