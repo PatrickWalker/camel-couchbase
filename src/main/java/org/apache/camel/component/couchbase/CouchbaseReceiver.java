@@ -79,7 +79,11 @@ public class CouchbaseReceiver implements Runnable {
             LOG.info("Received result set from Couchbase");
         }
 
-        for(ViewRow row : result) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("ViewResponse = {}", result);
+        }
+
+        for (ViewRow row : result) {
 
             String id = row.getId();
             Object doc = row.getDocument();
