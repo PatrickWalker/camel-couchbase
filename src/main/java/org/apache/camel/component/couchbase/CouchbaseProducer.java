@@ -30,14 +30,14 @@ public class CouchbaseProducer extends DefaultProducer {
     private static final Logger LOG = LoggerFactory.getLogger(CouchbaseProducer.class);
     private CouchbaseEndpoint endpoint;
     private CouchbaseClient client;
-    private long startKey;
+    private long startId;
 
     public CouchbaseProducer(CouchbaseEndpoint endpoint, CouchbaseClient client) {
         super(endpoint);
         this.endpoint = endpoint;
         this.client = client;
-        if (endpoint.isAutoStartKeyForInserts()) {
-            this.startKey = endpoint.getStartKeyForInsertsFrom();
+        if (endpoint.isAutoStartIdForInserts()) {
+            this.startId = endpoint.getStartingIdForInsertsFrom();
         }
 
     }
@@ -46,22 +46,22 @@ public class CouchbaseProducer extends DefaultProducer {
 
         Map<String, Object> headers = exchange.getIn().getHeaders();
 
-        String key = (headers.containsKey(CouchbaseConstants.HEADER_KEY))
-                ? exchange.getIn().getHeader(CouchbaseConstants.HEADER_KEY, String.class)
-                : endpoint.getKey();
+        String id = (headers.containsKey(CouchbaseConstants.HEADER_ID))
+                ? exchange.getIn().getHeader(CouchbaseConstants.HEADER_ID, String.class)
+                : endpoint.getId();
 
-        if (endpoint.isAutoStartKeyForInserts()) {
-            key = Long.toString(startKey);
-            startKey++;
-        } else if (key == null) {
-            throw new CouchbaseException(CouchbaseConstants.HEADER_KEY + " is not specified in message header or endpoint URL.", exchange);
+        if (endpoint.isAutoStartIdForInserts()) {
+            id = Long.toString(startId);
+            startId++;
+        } else if (id == null) {
+            throw new CouchbaseException(CouchbaseConstants.HEADER_ID + " is not specified in message header or endpoint URL.", exchange);
         }
 
         Object obj = exchange.getIn().getBody();
-        client.set(key, obj).get();
+        client.set(id, obj).get();
 
         //cleanup the cache headers
-        exchange.getIn().removeHeader(CouchbaseConstants.HEADER_KEY);
+        exchange.getIn().removeHeader(CouchbaseConstants.HEADER_ID);
 
     }
 

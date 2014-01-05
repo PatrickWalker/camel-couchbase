@@ -40,8 +40,8 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
 
     private String key;
 
-    private boolean autoStartKeyForInserts = false;
-    private long startKeyForInsertsFrom = 0;
+    private boolean autoStartIdForInserts = false;
+    private long startingIdForInsertsFrom = 0;
 
     private String designDocumentName = DEFAULT_DESIGN_DOCUMENT_NAME;
     private String viewName = DEFAULT_VIEWNAME;
@@ -129,20 +129,20 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
         this.key = key;
     }
 
-    public boolean isAutoStartKeyForInserts() {
-        return autoStartKeyForInserts;
+    public boolean isAutoStartIdForInserts() {
+        return autoStartIdForInserts;
     }
 
-    public void setAutoStartKeyForInserts(boolean autoStartKeyForInserts) {
-        this.autoStartKeyForInserts = autoStartKeyForInserts;
+    public void setAutoStartIdForInserts(boolean autoStartIdForInserts) {
+        this.autoStartIdForInserts = autoStartIdForInserts;
     }
 
-    public long getStartKeyForInsertsFrom() {
-        return startKeyForInsertsFrom;
+    public long getStartingIdForInsertsFrom() {
+        return startingIdForInsertsFrom;
     }
 
-    public void setStartKeyForInsertsFrom(long startKeyForInsertsFrom) {
-        this.startKeyForInsertsFrom = startKeyForInsertsFrom;
+    public void setStartingIdForInsertsFrom(long startingIdForInsertsFrom) {
+        this.startingIdForInsertsFrom = startingIdForInsertsFrom;
     }
 
     public String getDesignDocumentName() {

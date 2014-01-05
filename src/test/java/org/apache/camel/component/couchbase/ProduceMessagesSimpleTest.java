@@ -22,16 +22,14 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
-public class CouchbaseIntegrationTest extends CamelTestSupport {
+public class ProduceMessagesSimpleTest extends CamelTestSupport {
 
     @Test
     public void testInsert() throws Exception {
         MockEndpoint mock = getMockEndpoint("mock:result");
-        mock.expectedMessageCount(2);
+        mock.expectedMessageCount(1);
 
-        template.sendBody("direct:start", "ugol1");
-        template.sendBody("direct:start", "ugol2");
-
+        template.sendBody("direct:start", "ugol");
         assertMockEndpointsSatisfied();
 
     }
@@ -42,10 +40,12 @@ public class CouchbaseIntegrationTest extends CamelTestSupport {
             @Override
             public void configure() throws Exception {
 
-                // need couchbase to be installed on localhost
+                // need couchbase installed on localhost
                 from("direct:start")
-                        .to("couchbase:http://localhost/default?autoStartKeyForInserts=true&startKeyForInsertsFrom=1000")
+                        .setHeader(CouchbaseConstants.HEADER_ID, constant("120770"))
+                        .to("couchbase:http://localhost/default")
                         .to("mock:result");
+
             }
         };
     }

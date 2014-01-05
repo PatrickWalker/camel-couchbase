@@ -91,8 +91,6 @@ public class CouchbaseReceiver implements Runnable {
             String key = row.getKey();
             String designDocumentName = endpoint.getDesignDocumentName();
             String viewName = endpoint.getViewName();
-            //String geometry = row.getGeometry();
-            //String bbox = row.getBbox();
 
             Exchange exchange = endpoint.createExchange();
             exchange.getIn().setBody(doc);
@@ -100,8 +98,6 @@ public class CouchbaseReceiver implements Runnable {
             exchange.getIn().setHeader(HEADER_KEY, key);
             exchange.getIn().setHeader(HEADER_DESIGN_DOCUMENT_NAME, designDocumentName);
             exchange.getIn().setHeader(HEADER_VIEWNAME, viewName);
-            //exchange.getIn().setHeader(HEADER_GEOMETRY, geometry);
-            //exchange.getIn().setHeader(HEADER_BBOX, bbox);
 
             if (LOG.isTraceEnabled()) {
                 logDetails(id, doc, key, designDocumentName, viewName, exchange);
@@ -126,8 +122,7 @@ public class CouchbaseReceiver implements Runnable {
         LOG.trace("Key = {}", key);
         LOG.trace("Design Document Name = {}", designDocumentName);
         LOG.trace("View Name = {}", viewName);
-        //LOG.trace("Geometry = {}", geometry);
-        //LOG.trace("Bbox = {}", bbox);
+
     }
 
     public void stop() {

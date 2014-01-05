@@ -75,11 +75,14 @@ public class CouchbaseClientSpikes {
         ViewResponse result = client.query(view, query);
 
         for(ViewRow row : result) {
-            String k = row.getId();
+            String id = row.getId();
+            System.out.println("ID: " + id);
+            String k = row.getKey();
             System.out.println("Key: " + k);
-            System.out.println(row.getDocument());
-            //System.out.println("Document: " + client.get(k));
-            // The full document (as String) is available through row.getDocument();
+            System.out.println("Document: " + row.getDocument());
+            System.out.println("Value: " + row.getValue());
+            //System.out.println("BBox: " + row.getBbox());
+            //System.out.println("Geometry: " + row.getGeometry());
         }
         // Shutting down properly
         client.shutdown();

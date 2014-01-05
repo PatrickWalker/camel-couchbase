@@ -27,7 +27,5 @@ public interface CouchbaseConstants {
     static String HEADER_ID = "ID";
     static String HEADER_DESIGN_DOCUMENT_NAME = "DDN";
     static String HEADER_VIEWNAME = "VN";
-    static String HEADER_GEOMETRY = "GEO";
-    static String HEADER_BBOX = "BBX";
 
 }

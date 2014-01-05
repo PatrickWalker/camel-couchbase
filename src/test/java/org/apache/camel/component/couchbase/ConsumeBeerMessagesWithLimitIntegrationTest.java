@@ -22,7 +22,7 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
-public class CouchbaseConsumerIntegrationTest extends CamelTestSupport {
+public class ConsumeBeerMessagesWithLimitIntegrationTest extends CamelTestSupport {
 
     @Test
     public void testInsert() throws Exception {
@@ -39,7 +39,7 @@ public class CouchbaseConsumerIntegrationTest extends CamelTestSupport {
             @Override
             public void configure() throws Exception {
 
-                // need couchbase to be installed on localhost with beer-sample data
+                // need couchbase installed on localhost with beer-sample data
                 from("couchbase:http://localhost/beer-sample?designDocumentName=beer&viewName=brewery_beers&limit=10")
                         .to("mock:result");
             }
