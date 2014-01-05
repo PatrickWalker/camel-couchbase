@@ -71,7 +71,7 @@ public class CouchbaseReceiver implements Runnable {
         if (LOG.isInfoEnabled()) {
             LOG.info("Received result set from Couchbase");
         }
-        
+
         for(ViewRow row : result) {
 
             String id = row.getId();
