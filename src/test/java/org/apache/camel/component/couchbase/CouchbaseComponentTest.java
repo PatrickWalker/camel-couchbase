@@ -79,30 +79,3 @@ public class CouchbaseComponentTest {
 
     }
 }
-
-/*
-import static org.junit.Assert.assertEquals;
-
-public class CouchbaseComponentTest extends CamelTestSupport {
-
-    /*
-    @Test
-    public void testCouchbase() throws Exception {
-        MockEndpoint mock = getMockEndpoint("mock:result");
-        mock.expectedMinimumMessageCount(1);
-
-        assertMockEndpointsSatisfied();
-    }
-
-    @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            public void configure() {
-                from("file:data?noop=true")
-                        .log("Camel couchbase logging...")
-                        .to("couchbase:http://localhost/beer-sample")
-                        .to("mock:result");
-            }
-        };
-    }
-    */
