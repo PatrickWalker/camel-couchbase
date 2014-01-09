@@ -18,12 +18,16 @@
 package org.apache.camel.component.couchbase;
 
 import com.couchbase.client.CouchbaseClient;
+import net.spy.memcached.internal.OperationFuture;
 import org.apache.camel.Exchange;
+import org.apache.camel.InvalidPayloadException;
 import org.apache.camel.Message;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class CouchbaseProducerTest {
@@ -40,8 +44,8 @@ public class CouchbaseProducerTest {
     @Mock
     private Message msg;
 
-    //@Mock
-    //private Response response;
+    @Mock
+    private OperationFuture response;
 
     private CouchbaseProducer producer;
 
@@ -52,39 +56,25 @@ public class CouchbaseProducerTest {
         when(exchange.getIn()).thenReturn(msg);
     }
 
-
-
-    /*
     @SuppressWarnings("unchecked")
-    @Test(expected = InvalidPayloadException.class)
+    @Test(expected = CouchbaseException.class)
     public void testBodyMandatory() throws Exception {
         when(msg.getMandatoryBody()).thenThrow(InvalidPayloadException.class);
         producer.process(exchange);
     }
 
 
-
     @Test
     public void testDocumentHeadersAreSet() throws Exception {
 
-        String name = "ugo";
-        String surname = "landini";
-
-        JsonObject doc = new JsonObject();
-        doc.addProperty("name", name);
-        doc.addProperty("surname", surname);
-
+        String doc = "ugol";
         when(msg.getMandatoryBody()).thenReturn(doc);
-        when(client.set("1", doc)).thenReturn(response);
-        when(response.getName()).thenReturn(name);
-        when(response.getSurname()).thenReturn(surname);
+        when(client.set("1", doc).get()).thenReturn(true);
 
         producer.process(exchange);
-        verify(msg).setHeader(CouchDbConstants.HEADER_DOC_ID, id);
-        verify(msg).setHeader(CouchDbConstants.HEADER_DOC_REV, rev);
+        verify(msg).setHeader(CouchbaseConstants.HEADER_ID, "1");
     }
-
-
+/*
     @SuppressWarnings("unchecked")
     @Test(expected = InvalidPayloadException.class)
     public void testNullSaveResponseThrowsError() throws Exception {
@@ -92,22 +82,6 @@ public class CouchbaseProducerTest {
         when(producer.getBodyAsJsonElement(exchange)).thenThrow(InvalidPayloadException.class);
         producer.process(exchange);
     }
-
-    @Test
-    public void testStringBodyIsConvertedToJsonTree() throws Exception {
-        when(msg.getMandatoryBody()).thenReturn("{ \"name\" : \"coldplay\" }");
-        when(client.save(anyObject())).thenAnswer(new Answer<Response>() {
-
-            @Override
-            public Response answer(InvocationOnMock invocation) throws Throwable {
-                assertTrue(invocation.getArguments()[0].getClass() + " but wanted " + JsonElement.class,
-                        invocation.getArguments()[0] instanceof JsonElement);
-                return new Response();
-            }
-        });
-        producer.process(exchange);
-        verify(client).save(any(JsonObject.class));
-    }
-    */
+*/
 
 }

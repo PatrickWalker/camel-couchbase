@@ -18,16 +18,16 @@
 package org.apache.camel.component.couchbase;
 
 import com.couchbase.client.CouchbaseClient;
+import net.spy.memcached.internal.OperationFuture;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+import static org.apache.camel.component.couchbase.CouchbaseConstants.*;
+
 public class CouchbaseProducer extends DefaultProducer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CouchbaseProducer.class);
     private CouchbaseEndpoint endpoint;
     private CouchbaseClient client;
     private long startId;
@@ -46,22 +46,34 @@ public class CouchbaseProducer extends DefaultProducer {
 
         Map<String, Object> headers = exchange.getIn().getHeaders();
 
-        String id = (headers.containsKey(CouchbaseConstants.HEADER_ID))
-                ? exchange.getIn().getHeader(CouchbaseConstants.HEADER_ID, String.class)
+        String id = (headers.containsKey(HEADER_ID))
+                ? exchange.getIn().getHeader(HEADER_ID, String.class)
                 : endpoint.getId();
 
         if (endpoint.isAutoStartIdForInserts()) {
             id = Long.toString(startId);
             startId++;
         } else if (id == null) {
-            throw new CouchbaseException(CouchbaseConstants.HEADER_ID + " is not specified in message header or endpoint URL.", exchange);
+            throw new CouchbaseException(HEADER_ID + " is not specified in message header or endpoint URL.", exchange);
         }
 
-        Object obj = exchange.getIn().getBody();
-        client.set(id, obj).get();
+        if (endpoint.getOperation().equals(COUCHBASE_PUT)) {
+            log.info("Type of operation: PUT");
+            Object obj = exchange.getIn().getBody();
+            OperationFuture<Boolean> result = client.set(id, obj);
+            exchange.getOut().setBody(result.get());
+        } else if (endpoint.getOperation().equals(COUCHBASE_GET)) {
+            log.info("Type of operation: GET");
+            Object result = client.get(id);
+            exchange.getOut().setBody(result);
+        } else if (endpoint.getOperation().equals(COUCHBASE_DELETE)) {
+            log.info("Type of operation: DELETE");
+            OperationFuture<Boolean> result = client.delete(id);
+            exchange.getOut().setBody(result.get());
+        }
 
         //cleanup the cache headers
-        exchange.getIn().removeHeader(CouchbaseConstants.HEADER_ID);
+        exchange.getIn().removeHeader(HEADER_ID);
 
     }
 

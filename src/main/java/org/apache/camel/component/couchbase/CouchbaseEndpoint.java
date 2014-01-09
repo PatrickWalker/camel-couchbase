@@ -40,26 +40,28 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
 
     private String key;
 
+    private String operation = COUCHBASE_PUT;
+
     private boolean autoStartIdForInserts = false;
+
     private long startingIdForInsertsFrom = 0;
-
     private String designDocumentName = DEFAULT_DESIGN_DOCUMENT_NAME;
+
     private String viewName = DEFAULT_VIEWNAME;
-
     private int limit = -1;
-    private boolean descending = false;
 
+    private boolean descending = false;
     private int skip = -1;
 
     private String rangeStartKey = "";
+
     private String rangeEndKey = "";
-
     private String username = "";
+
     private String password = "";
-
-
     public CouchbaseEndpoint() {
     }
+
 
     public CouchbaseEndpoint(String uri, String remaining, CouchbaseComponent component) throws URISyntaxException {
         super(uri, component);
@@ -86,6 +88,7 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
     public CouchbaseEndpoint(String endpointUri) {
         super(endpointUri);
     }
+
     public Producer createProducer() throws Exception {
         return new CouchbaseProducer(this, createClient());
     }
@@ -95,7 +98,6 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
     public boolean isSingleton() {
         return true;
     }
-
     public String getProtocol() {
         return protocol;
     }
@@ -104,10 +106,10 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
         this.protocol = protocol;
     }
 
-
     public String getBucket() {
         return bucket;
     }
+
 
     public void setBucket(String bucket) {
         this.bucket = bucket;
@@ -127,6 +129,14 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     public boolean isAutoStartIdForInserts() {

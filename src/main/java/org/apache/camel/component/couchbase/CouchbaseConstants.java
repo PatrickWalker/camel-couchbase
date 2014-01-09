@@ -21,6 +21,9 @@ public interface CouchbaseConstants {
 
     static int COUCHBASE_DEFAULT_PORT = 8091;
     static String COUCHBASE_URI_ERROR = "Invalid URI. Format must be of the form couchbase:http[s]://hostname[:port]/bucket?[options...]";
+    static String COUCHBASE_PUT = "PUT";
+    static String COUCHBASE_GET = "GET";
+    static String COUCHBASE_DELETE = "DEL";
     static String DEFAULT_DESIGN_DOCUMENT_NAME = "beer";
     static String DEFAULT_VIEWNAME = "brewery_beers";
     static String HEADER_KEY = "KEY";
