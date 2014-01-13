@@ -71,7 +71,7 @@ public class CouchbaseComponentTest {
     public void testCouchbaseURI() throws Exception {
 
         Map<String, Object> params = new HashMap<String, Object>();
-        String uri = "couchdb:http://localhost/bucket?param=true";
+        String uri = "couchbase:http://localhost/bucket?param=true";
         String remaining = "http://localhost/bucket?param=true";
 
         CouchbaseEndpoint endpoint = new CouchbaseComponent(context).createEndpoint(uri, remaining, params);

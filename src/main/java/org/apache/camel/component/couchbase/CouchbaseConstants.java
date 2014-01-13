@@ -19,16 +19,24 @@ package org.apache.camel.component.couchbase;
 
 public interface CouchbaseConstants {
 
-    static int COUCHBASE_DEFAULT_PORT = 8091;
     static String COUCHBASE_URI_ERROR = "Invalid URI. Format must be of the form couchbase:http[s]://hostname[:port]/bucket?[options...]";
-    static String COUCHBASE_PUT = "PUT";
-    static String COUCHBASE_GET = "GET";
-    static String COUCHBASE_DELETE = "DEL";
+    static String COUCHBASE_PUT = "CCB_PUT";
+    static String COUCHBASE_GET = "CCB_GET";
+    static String COUCHBASE_DELETE = "CCB_DEL";
     static String DEFAULT_DESIGN_DOCUMENT_NAME = "beer";
     static String DEFAULT_VIEWNAME = "brewery_beers";
-    static String HEADER_KEY = "KEY";
-    static String HEADER_ID = "ID";
-    static String HEADER_DESIGN_DOCUMENT_NAME = "DDN";
-    static String HEADER_VIEWNAME = "VN";
+    static String HEADER_KEY = "CCB_KEY";
+    static String HEADER_ID = "CCB_ID";
+    static String HEADER_DESIGN_DOCUMENT_NAME = "CCB_DDN";
+    static String HEADER_VIEWNAME = "CCB_VN";
+
+    static int COUCHBASE_DEFAULT_PORT = 8091;
+    static long DEFAULT_OP_TIMEOUT = 2500;
+    static int DEFAULT_TIMEOUT_EXCEPTION_THRESHOLD = 998;
+    static int DEFAULT_READ_BUFFER_SIZE = 16384;
+    static long DEFAULT_OP_QUEUE_MAX_BLOCK_TIME = 10000;
+    static long DEFAULT_MAX_RECONNECT_DELAY = 30000;
+    static long DEFAULT_OBS_POLL_INTERVAL = 400;
+    static long DEFAULT_OBS_TIMEOUT = -1;
 
 }

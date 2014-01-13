@@ -18,6 +18,7 @@
 package org.apache.camel.component.couchbase;
 
 import com.couchbase.client.CouchbaseClient;
+import com.couchbase.client.CouchbaseConnectionFactoryBuilder;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -59,9 +60,19 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
     private String username = "";
 
     private String password = "";
+
+    // Parameters for Couchbase connection fine tuning
+    private long opTimeOut = DEFAULT_OP_TIMEOUT;
+    private int timeoutExceptionThreshold = DEFAULT_TIMEOUT_EXCEPTION_THRESHOLD;
+    private int readBufferSize = DEFAULT_READ_BUFFER_SIZE;
+    private boolean shouldOptimize;
+    private long maxReconnectDelay = DEFAULT_MAX_RECONNECT_DELAY;
+    private long opQueueMaxBlockTime = DEFAULT_OP_QUEUE_MAX_BLOCK_TIME;
+    private long obsPollInterval = DEFAULT_OBS_POLL_INTERVAL;
+    private long obsTimeout = DEFAULT_OBS_TIMEOUT;
+
     public CouchbaseEndpoint() {
     }
-
 
     public CouchbaseEndpoint(String uri, String remaining, CouchbaseComponent component) throws URISyntaxException {
         super(uri, component);
@@ -85,6 +96,7 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
         }
     }
 
+
     public CouchbaseEndpoint(String endpointUri) {
         super(endpointUri);
     }
@@ -92,6 +104,7 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
     public Producer createProducer() throws Exception {
         return new CouchbaseProducer(this, createClient());
     }
+
     public Consumer createConsumer(Processor processor) throws Exception {
         return new CouchbaseConsumer(this, createClient(), processor);
     }
@@ -101,7 +114,6 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
     public String getProtocol() {
         return protocol;
     }
-
     public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
@@ -110,10 +122,10 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
         return bucket;
     }
 
-
     public void setBucket(String bucket) {
         this.bucket = bucket;
     }
+
 
     public String getHostname() {
         return hostname;
@@ -235,6 +247,70 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
         this.password = password;
     }
 
+    public long getOpTimeOut() {
+        return opTimeOut;
+    }
+
+    public void setOpTimeOut(long opTimeOut) {
+        this.opTimeOut = opTimeOut;
+    }
+
+    public int getTimeoutExceptionThreshold() {
+        return timeoutExceptionThreshold;
+    }
+
+    public void setTimeoutExceptionThreshold(int timeoutExceptionThreshold) {
+        this.timeoutExceptionThreshold = timeoutExceptionThreshold;
+    }
+
+    public int getReadBufferSize() {
+        return readBufferSize;
+    }
+
+    public void setReadBufferSize(int readBufferSize) {
+        this.readBufferSize = readBufferSize;
+    }
+
+    public boolean isShouldOptimize() {
+        return shouldOptimize;
+    }
+
+    public void setShouldOptimize(boolean shouldOptimize) {
+        this.shouldOptimize = shouldOptimize;
+    }
+
+    public long getMaxReconnectDelay() {
+        return maxReconnectDelay;
+    }
+
+    public void setMaxReconnectDelay(long maxReconnectDelay) {
+        this.maxReconnectDelay = maxReconnectDelay;
+    }
+
+    public long getOpQueueMaxBlockTime() {
+        return opQueueMaxBlockTime;
+    }
+
+    public void setOpQueueMaxBlockTime(long opQueueMaxBlockTime) {
+        this.opQueueMaxBlockTime = opQueueMaxBlockTime;
+    }
+
+    public long getObsPollInterval() {
+        return obsPollInterval;
+    }
+
+    public void setObsPollInterval(long obsPollInterval) {
+        this.obsPollInterval = obsPollInterval;
+    }
+
+    public long getObsTimeout() {
+        return obsTimeout;
+    }
+
+    public void setObsTimeout(long obsTimeout) {
+        this.obsTimeout = obsTimeout;
+    }
+
     public String makeBootstrapURI() {
         return protocol + "://" + hostname + ":" + port + "/pools";
     }
@@ -244,7 +320,19 @@ public class CouchbaseEndpoint extends DefaultEndpoint {
                 new URI(makeBootstrapURI())
         );
 
-        return new CouchbaseClient(hosts, bucket, username, password);
+        CouchbaseConnectionFactoryBuilder cfb = new CouchbaseConnectionFactoryBuilder();
+
+        if (opTimeOut != DEFAULT_OP_TIMEOUT) cfb.setOpTimeout(opTimeOut);
+        if (timeoutExceptionThreshold != DEFAULT_TIMEOUT_EXCEPTION_THRESHOLD) cfb.setTimeoutExceptionThreshold(timeoutExceptionThreshold);
+        if (readBufferSize != DEFAULT_READ_BUFFER_SIZE) cfb.setReadBufferSize(readBufferSize);
+        if (shouldOptimize) cfb.setShouldOptimize(true);
+        if (maxReconnectDelay != DEFAULT_MAX_RECONNECT_DELAY) cfb.setMaxReconnectDelay(maxReconnectDelay);
+        if (opQueueMaxBlockTime != DEFAULT_OP_QUEUE_MAX_BLOCK_TIME) cfb.setOpQueueMaxBlockTime(opQueueMaxBlockTime);
+        if (obsPollInterval != DEFAULT_OBS_POLL_INTERVAL) cfb.setObsPollInterval(obsPollInterval);
+        if (obsTimeout != DEFAULT_OBS_TIMEOUT) cfb.setObsTimeout(obsTimeout);
+
+        return new CouchbaseClient(cfb.buildCouchbaseConnection(hosts, bucket, username, password));
+
     }
 
 }
